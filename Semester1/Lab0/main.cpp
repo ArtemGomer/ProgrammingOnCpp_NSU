@@ -1,4 +1,3 @@
-#include <iostream>
 #include <map>
 #include <cstring>
 #include <string>
@@ -13,10 +12,11 @@ class frequency{
   float count;
   map <string, int> mp;
   map <string, int> :: iterator it;
+  multimap <int, string> mmp;
+  multimap <int, string> :: iterator mit;
   string strKey;
   char str[257] = {0};
   void checkIn(){
-    count++;
     if (strKey.length()){
       it = mp.find(strKey);
       if (it == mp.end()){
@@ -26,6 +26,7 @@ class frequency{
         it->second++;
       }
       strKey.clear();
+      count++;
     }
   }
 
@@ -42,6 +43,9 @@ class frequency{
       }
     }
     checkIn();
+    for (it = mp.begin(); it != mp.end(); it++) {
+      mmp.insert(make_pair(it->second, it->first));
+    }
   }
 
  public:
@@ -56,8 +60,8 @@ class frequency{
   }
   void printFrequency(){
     getFrequency();
-    for (it = mp.begin(); it != mp.end(); it++){
-      fout << it->first << " " << it->second << " " << it->second / count * 100 << endl;
+    for (mit = mmp.begin(); mit != mmp.end(); mit++){
+      fout << mit->second << " " << mit->first << " " << mit->first / count * 100 << endl;
     }
   }
 };
