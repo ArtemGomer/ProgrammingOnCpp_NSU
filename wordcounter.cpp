@@ -20,7 +20,6 @@ void frequency::countFrequency() {
   ifstream fin("in.txt");
   string str, strKey;
   map<string, int> mp;
-  map<string, int>::iterator it;
   while (getline(fin, str)) {
     int length = str.length();
     for (int i = 0; i < length; i++) {
