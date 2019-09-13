@@ -1,4 +1,4 @@
-Only for thieves!
+#Only for thieves!
 
 ## If you are a thief follow this instructions:
 * Clean your mind
