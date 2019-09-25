@@ -1,8 +1,8 @@
-#include "trit.h"
+#include "tritset.h"
 
 int main() {
-  trit t(True);
-  trit s(Unknown);
-  std::cout << (t | s) << " " << (t & s) << std::endl;
+  tritset A(10);
+  onetrit B(True), C(False);
+  std::cout << ~B << std::endl;
   return 0;
 }
