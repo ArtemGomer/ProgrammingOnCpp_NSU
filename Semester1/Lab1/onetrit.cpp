@@ -11,24 +11,7 @@ onetrit &onetrit::operator=(TritValue value) {
 
 onetrit::onetrit(TritValue value) : val(value) {}
 
-std::ostream &operator<<(std::ostream &out, TritValue value) {
-  switch (value) {
-    case Unknown: {
-      std::cout << "Unknown";
-      break;
-    }
-    case True: {
-      std::cout << "True";
-      break;
-    }
-    default: {
-      std::cout << "False";
-      break;
-    }
-  }
-  return out;
-}
-
+//Операции между тритами
 TritValue operator|(onetrit &left, onetrit &right) {
   if ((left.GetValue() == True) || (right.GetValue() == True))
     return True;
@@ -56,28 +39,48 @@ TritValue operator~(onetrit &currentTrit) {
     return Unknown;
 }
 
+//получить значение трита в тритсете
+TritValue GetTrit(unsigned char currentChar, int index) {
+  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
+  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
+  return ((currentChar & maskFirst) == 0) ? ((currentChar & maskSecond) == 0 ? Unknown : True) : False;
+}
+
+//Назначить определенный трит в тритсете
+void SetTrit(unsigned char &currentChar, TritValue value, int index) {
+  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
+  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
+  if (value == Unknown) {
+    currentChar &= ~(maskFirst | maskSecond);
+  } else if (value == True) {
+    currentChar &= ~maskFirst;
+    currentChar |= maskSecond;
+  } else {
+    currentChar |= maskFirst;
+    currentChar &= ~maskSecond;
+  }
+}
+
+//Вернуть значение трита
 TritValue onetrit::GetValue() {
   return val;
 }
 
-TritValue GetTrit(unsigned char &currentChar, int index) {
-  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
-  auto maskSecod = (unsigned int) pow(2, 6 - 2 * (index % 4));
-  return ((currentChar & maskFirst) != 1) ? False : ((currentChar & maskSecod) == 0 ? Unknown : True);
-}
-
-void SetTrit(unsigned char &currentChar, TritValue value, int index){
-  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
-  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
-  if (value == Unknown){
-    currentChar &= ~(maskFirst | maskSecond);
+//Удобный вывод значения трита
+std::ostream &operator<<(std::ostream &out, TritValue value) {
+  switch (value) {
+    case Unknown: {
+      out << "Unknown";
+      break;
+    }
+    case True: {
+      out << "True";
+      break;
+    }
+    default: {
+      out << "False";
+      break;
+    }
   }
-  else if (value == True){
-    currentChar &= ~maskFirst;
-    currentChar |= maskSecond;
-  }
-  else{
-    currentChar |= maskFirst;
-    currentChar &= ~maskSecond;
-  }
+  return out;
 }

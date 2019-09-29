@@ -22,7 +22,7 @@ std::ostream &operator<<(std::ostream &out, TritValue value);
 TritValue operator|(onetrit &left, onetrit &right);
 TritValue operator&(onetrit &left, onetrit &right);
 TritValue operator~(onetrit &currentTrit);
-TritValue GetTrit(unsigned char &currentChar, int index);
+TritValue GetTrit(unsigned char currentChar, int index);
 void SetTrit(unsigned char &currentChar, TritValue value, int index);
 
 #endif //LAB2_1_ONETRIT_H
