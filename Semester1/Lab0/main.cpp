@@ -3,11 +3,11 @@
 int main(int argc, char **argv) {
   wordCounter f;
   try {
-    f.countFrequency(argv[argc - 2]);
-    f.printFrequency(argv[argc - 1]);
+    f.countFrequency(argv[1]);
+    f.printFrequency(argv[2]);
   }
   catch (std::invalid_argument &ex) {
-    std::cout << ex.what() << argv[argc - 2] << std::endl;
+    std::cout << ex.what() << std::endl;
   }
   return 0;
 }

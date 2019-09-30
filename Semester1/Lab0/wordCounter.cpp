@@ -11,7 +11,7 @@ wordCounter::wordCounter() {
 void wordCounter::countFrequency(char *inFileName) {
   std::ifstream in(inFileName);
   if (!in) {
-    throw std::invalid_argument("Can not open file ");
+    throw std::invalid_argument("Can not open inFile");
   }
   std::string buffer, key;
   while (std::getline(in, buffer, '\n')) {
@@ -36,6 +36,9 @@ void wordCounter::countFrequency(char *inFileName) {
 
 void wordCounter::printFrequency(char *outFileName) {
   std::ofstream out(outFileName);
+  if (!out){
+    throw std::invalid_argument("Can not open outFile");
+  }
   items.sort([](auto &left, auto &right) {
     return left.first < right.first;
   });
