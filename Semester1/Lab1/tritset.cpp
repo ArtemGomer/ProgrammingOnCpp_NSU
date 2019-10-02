@@ -3,15 +3,41 @@
 //
 
 #include "tritset.h"
+
+//Получить значение трита
+static TritValue GetTrit(unsigned char currentChar, int index) {
+  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
+  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
+  return ((currentChar & maskFirst) == 0) ? ((currentChar & maskSecond) == 0 ? Unknown : True) : False;
+}
+
+//Назначить определенный трит в тритсете
+static void SetTrit(unsigned char &currentChar, TritValue value, int index) {
+  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
+  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
+  if (value == Unknown) {
+    currentChar &= ~(maskFirst | maskSecond);
+  } else if (value == True) {
+    currentChar &= ~maskFirst;
+    currentChar |= maskSecond;
+  } else {
+    currentChar |= maskFirst;
+    currentChar &= ~maskSecond;
+  }
+}
+
 //Конструктор
-tritset::tritset(int reservedTrits) {
+tritset::tritset(const int reservedTrits) {
+  if (reservedTrits < 0) {
+    throw std::invalid_argument("The size of a tritset can not be negative.");
+  }
   numberOfTrits = reservedTrits;
   numberOfChars = (reservedTrits / 4) + 1;
   set.resize(numberOfChars);
 }
 
 //Конструктор копирования
-tritset::tritset(tritset &oldTritset) {
+tritset::tritset(const tritset &oldTritset) {
   std::cout << "Copying" << std::endl;
   numberOfChars = oldTritset.numberOfChars;
   numberOfTrits = oldTritset.numberOfTrits;
@@ -19,7 +45,7 @@ tritset::tritset(tritset &oldTritset) {
 }
 
 //Конструктор прокти-класса reference
-tritset::reference::reference(tritset *os, std::vector<unsigned char> &s, int ind, bool over)
+tritset::reference::reference(tritset *os, std::vector<unsigned char> &s, const int ind, const bool over)
     : newset(s), index(ind), overflow(over), newmem(false), ourset(os) {
 }
 
@@ -35,7 +61,7 @@ tritset::reference::~reference() {
 }
 
 //Оператор индексацмм
-tritset::reference tritset::operator[](int ind) {
+tritset::reference tritset::operator[](const int ind) {
   if (ind > numberOfTrits) {
     int newNumberOfChars = ind / 4 + 1;
     return reference(this, set, ind, newNumberOfChars >= numberOfChars);
@@ -45,7 +71,7 @@ tritset::reference tritset::operator[](int ind) {
 }
 
 //Присваивание значению
-tritset::reference &tritset::reference::operator=(TritValue value) {
+tritset::reference &tritset::reference::operator=(const TritValue value) {
   if ((overflow) && (value != Unknown)) {
     newmem = True;
     int newNumberOfChars = index / 4 + 1;
@@ -70,36 +96,36 @@ tritset::reference::operator TritValue() {
 }
 
 //Операции между тритсетами
-tritset tritset::operator|(tritset &right) {
-  int max_size = (numberOfTrits > right.numberOfTrits ? numberOfTrits : right.numberOfTrits);
+tritset operator|(tritset &left, tritset &right) {
+  int max_size = (left.numberOfTrits > right.numberOfTrits ? left.numberOfTrits : right.numberOfTrits);
   tritset A(max_size);
   onetrit val1(Unknown), val2(Unknown);
   for (int i = 0; i < max_size; i++) {
-    val1 = (*this)[i];
+    val1 = left[i];
     val2 = right[i];
     A[i] = val1 | val2;
   }
   return A;
 }
 
-tritset tritset::operator&(tritset &right) {
-  int max_size = (numberOfTrits > right.numberOfTrits ? numberOfTrits : right.numberOfTrits);
+tritset operator&(tritset &left, tritset &right) {
+  int max_size = (left.numberOfTrits > right.numberOfTrits ? left.numberOfTrits : right.numberOfTrits);
   tritset A(max_size);
   onetrit val1(Unknown), val2(Unknown);
   for (int i = 0; i < max_size; i++) {
-    val1 = (*this)[i];
+    val1 = left[i];
     val2 = right[i];
     A[i] = val1 & val2;
   }
   return A;
 }
 
-tritset tritset::operator~() {
-  int max_size = numberOfTrits;
+tritset operator~(tritset &current) {
+  int max_size = current.numberOfTrits;
   tritset A(max_size);
   onetrit val1(Unknown);
   for (int i = 0; i < max_size; i++) {
-    val1 = (*this)[i];
+    val1 = current[i];
     A[i] = ~val1;
   }
   return A;
@@ -139,24 +165,28 @@ void tritset::Shrink() {
   set.resize(numberOfChars);
 }
 
-//Вместимость
+//Вместимость тритов
 int tritset::Capacity() {
   return numberOfTrits;
 }
 
+//Количество char-ов для хранения тритов
 int tritset::Size() {
   return numberOfChars;
 }
 
 //забыть все с lastIndex-того элемента
-void tritset::Trim(int lastIndex) {
+void tritset::Trim(const int lastIndex) {
+  if (lastIndex < 0) {
+    throw std::invalid_argument("Last index must be >= 0");
+  }
   for (int i = lastIndex; i < numberOfTrits + 1; i++) {
     (*this)[i] = Unknown;
   }
 }
 
 //Подсчет вхождений значения в тритсет
-int tritset::Cardinality(TritValue val) {
+int tritset::Cardinality(const TritValue val) {
   int stat = 0;
   for (int i = 0; i < numberOfTrits; i++) {
     if ((*this)[i] == val) {
@@ -189,8 +219,8 @@ std::unordered_map<TritValue, int> tritset::Cardinality() {
 
 int tritset::logicalLength() {
   int lastIndex = 0;
-  for (int i = 0; i < numberOfTrits; i++){
-    if ((*this)[i] != Unknown){
+  for (int i = 0; i < numberOfTrits; i++) {
+    if ((*this)[i] != Unknown) {
       lastIndex = i;
     }
   }

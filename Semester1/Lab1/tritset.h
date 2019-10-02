@@ -2,8 +2,9 @@
 // Created by Gomer on 24.09.2019.
 //
 
-#ifndef LAB2_1_TRITSET_H
-#define LAB2_1_TRITSET_H
+#ifndef LAB2_1_tritset_H
+#define LAB2_1_tritset_H
+
 #include "onetrit.h"
 #include <vector>
 #include <unordered_map>
@@ -25,11 +26,11 @@ class tritset {
     friend std::ostream &operator<<(std::ostream &out, const tritset::reference &ref);
   };
   explicit tritset(int reservedTrits);
-  tritset(tritset &oldTritset);
+  tritset(const tritset &oldTritset);
   tritset::reference operator[](int ind);
-  tritset operator|(tritset &right);
-  tritset operator&(tritset &right);
-  tritset operator~();
+  friend tritset operator|(tritset &left, tritset &right);
+  friend tritset operator&(tritset &left, tritset &right);
+  friend tritset operator~(tritset &current);
   void Shrink();
   int Capacity();
   int Size();
@@ -43,4 +44,4 @@ class tritset {
   int numberOfTrits;
 };
 
-#endif //LAB2_1_TRITSET_H
+#endif //LAB2_1_tritset_H

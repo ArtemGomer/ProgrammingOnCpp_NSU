@@ -1,7 +1,3 @@
-//
-// Created by Gomer on 25.09.2019.
-//
-
 #include "onetrit.h"
 
 onetrit &onetrit::operator=(TritValue value) {
@@ -39,29 +35,7 @@ TritValue operator~(onetrit &currentTrit) {
     return Unknown;
 }
 
-//получить значение трита в тритсете
-TritValue GetTrit(unsigned char currentChar, int index) {
-  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
-  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
-  return ((currentChar & maskFirst) == 0) ? ((currentChar & maskSecond) == 0 ? Unknown : True) : False;
-}
-
-//Назначить определенный трит в тритсете
-void SetTrit(unsigned char &currentChar, TritValue value, int index) {
-  auto maskFirst = (unsigned int) pow(2, 6 - 2 * (index % 4) + 1);
-  auto maskSecond = (unsigned int) pow(2, 6 - 2 * (index % 4));
-  if (value == Unknown) {
-    currentChar &= ~(maskFirst | maskSecond);
-  } else if (value == True) {
-    currentChar &= ~maskFirst;
-    currentChar |= maskSecond;
-  } else {
-    currentChar |= maskFirst;
-    currentChar &= ~maskSecond;
-  }
-}
-
-//Вернуть значение трита
+//Получить значение трита
 TritValue onetrit::GetValue() {
   return val;
 }
