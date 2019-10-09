@@ -26,19 +26,22 @@ static void SetTrit(unsigned char &currentChar, TritValue value, int index) {
   }
 }
 
+TritValue tritset::operator[](int ind) const {
+  return GetTrit(set[ind / 4], ind);
+}
+
 //Конструктор
 tritset::tritset(const int reservedTrits) {
   if (reservedTrits < 0) {
     throw std::invalid_argument("The size of a tritset can not be negative.");
   }
   numberOfTrits = reservedTrits;
-  numberOfChars = (reservedTrits / 4) + 1;
+  numberOfChars = reservedTrits == 0 ? 0 : (reservedTrits / 4) + 1;
   set.resize(numberOfChars);
 }
 
 //Конструктор копирования
 tritset::tritset(const tritset &oldTritset) {
-  std::cout << "Copying" << std::endl;
   numberOfChars = oldTritset.numberOfChars;
   numberOfTrits = oldTritset.numberOfTrits;
   set = oldTritset.set;
@@ -53,7 +56,7 @@ tritset::reference::reference(tritset *os, std::vector<unsigned char> &s, const 
 tritset::reference::~reference() {
   if (newmem) {
     ourset->set.resize(newset.size());
-    ourset->numberOfTrits = index;
+    ourset->numberOfTrits = index + 1;
     ourset->numberOfChars = newset.size();
     SetTrit(ourset->set[index / 4], GetTrit(newset[index / 4], index), index);
   }
@@ -62,6 +65,9 @@ tritset::reference::~reference() {
 
 //Оператор индексацмм
 tritset::reference tritset::operator[](const int ind) {
+  if (ind < 0){
+    throw std::invalid_argument("Index can not be negative.");
+  }
   if (ind > numberOfTrits) {
     int newNumberOfChars = ind / 4 + 1;
     return reference(this, set, ind, newNumberOfChars >= numberOfChars);
@@ -91,7 +97,7 @@ tritset::reference &tritset::reference::operator=(const tritset::reference &ref)
 }
 
 //Приведение типов
-tritset::reference::operator TritValue() {
+tritset::reference::operator TritValue() const {
   return GetTrit(newset[index / 4], index);
 }
 

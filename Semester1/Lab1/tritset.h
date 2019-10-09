@@ -20,7 +20,7 @@ class tritset {
    public:
     reference(tritset *os, std::vector<unsigned char> &s, int ind, bool over);
     ~reference();
-    operator TritValue();
+    operator TritValue() const;
     reference &operator=(TritValue value);
     reference &operator=(const reference &ref);
     friend std::ostream &operator<<(std::ostream &out, const tritset::reference &ref);
@@ -28,6 +28,7 @@ class tritset {
   explicit tritset(int reservedTrits);
   tritset(const tritset &oldTritset);
   tritset::reference operator[](int ind);
+  TritValue operator[](int ind) const;
   friend tritset operator|(tritset &left, tritset &right);
   friend tritset operator&(tritset &left, tritset &right);
   friend tritset operator~(tritset &current);
