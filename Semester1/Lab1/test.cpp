@@ -78,6 +78,11 @@ TEST_CASE("Tritset operations") {
     set.Shrink();
     REQUIRE(set.Size() == 2);
     REQUIRE(set.Capacity() == 6);
+    tritset set0(10);
+    set0.Shrink();
+    REQUIRE(set0.logicalLength() == 0);
+    REQUIRE(set0.Size() == 0);
+    REQUIRE(set0.Capacity() == 0);
   }
   SECTION("Trim") {
     tritset set(5);

@@ -66,10 +66,8 @@ tritset::reference &tritset::reference::operator=(const TritValue value) {
     ourset->numberOfChars = index / 4 + 1;
     ourset->set.resize(ourset->numberOfChars);
     ourset->numberOfTrits = index + 1;
-    SetTrit(ourset->set[index / 4], value, index);
-  } else if (index <= ourset->numberOfTrits) {
-    SetTrit(ourset->set[index / 4], value, index);
   }
+  SetTrit(ourset->set[index / 4], value, index);
   return *this;
 }
 
@@ -115,9 +113,16 @@ tritset operator~(tritset &current) {
 //Утилиты для тритсета
 //Сжимание до последнего значащего трита
 void tritset::Shrink() {
-  numberOfChars = (logicalLength() - 1) / 4 + 1;
-  numberOfTrits = logicalLength();
-  set.resize(numberOfChars);
+  int length = logicalLength();
+  if (length != 0) {
+    numberOfChars = (length - 1) / 4 + 1;
+    numberOfTrits = length;
+    set.resize(numberOfChars);
+  } else {
+    numberOfChars = 0;
+    numberOfTrits = 0;
+    set.resize(0);
+  }
 }
 
 //Вместимость тритов
@@ -179,5 +184,9 @@ int tritset::logicalLength() {
       lastIndex = i;
     }
   }
-  return lastIndex + 1;
+  if (lastIndex == 0) {
+    return 0;
+  } else {
+    return lastIndex + 1;
+  }
 }
