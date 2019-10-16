@@ -1,53 +1,41 @@
 #include "onetrit.h"
 
-onetrit &onetrit::operator=(TritValue value) {
-  val = value;
-  return *this;
-}
-
-onetrit::onetrit(TritValue value) : val(value) {}
-
 //Операции между тритами
-TritValue operator|(onetrit &left, onetrit &right) {
-  if ((left.GetValue() == True) || (right.GetValue() == True))
-    return True;
-  else if ((left.GetValue() == Unknown) || (right.GetValue() == Unknown))
-    return Unknown;
+TritValue operator|(TritValue left, TritValue right) {
+  if ((left == TritValue::True) || (right == TritValue::True))
+    return TritValue::True;
+  else if ((left == TritValue::Unknown) || (right == TritValue::Unknown))
+    return TritValue::Unknown;
   else
-    return False;
+    return TritValue::False;
 }
 
-TritValue operator&(onetrit &left, onetrit &right) {
-  if ((left.GetValue() == False) || (right.GetValue() == False))
-    return False;
-  else if ((left.GetValue() == Unknown) || (right.GetValue() == Unknown))
-    return Unknown;
+TritValue operator&(TritValue left, TritValue right) {
+  if ((left == TritValue::False) || (right == TritValue::False))
+    return TritValue::False;
+  else if ((left == TritValue::Unknown) || (right == TritValue::Unknown))
+    return TritValue::Unknown;
   else
-    return True;
+    return TritValue::True;
 }
 
-TritValue operator~(onetrit &currentTrit) {
-  if (currentTrit.GetValue() == True)
-    return False;
-  else if (currentTrit.GetValue() == False)
-    return True;
+TritValue operator~(TritValue currentTrit) {
+  if (currentTrit == TritValue::True)
+    return TritValue::False;
+  else if (currentTrit == TritValue::False)
+    return TritValue::True;
   else
-    return Unknown;
-}
-
-//Получить значение трита
-TritValue onetrit::GetValue() {
-  return val;
+    return TritValue::Unknown;
 }
 
 //Удобный вывод значения трита
 std::ostream &operator<<(std::ostream &out, TritValue value) {
   switch (value) {
-    case Unknown: {
+    case TritValue::Unknown: {
       out << "Unknown";
       break;
     }
-    case True: {
+    case TritValue::True: {
       out << "True";
       break;
     }
