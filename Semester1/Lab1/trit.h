@@ -5,7 +5,6 @@
 #ifndef LAB2_1_TRIT_H
 #define LAB2_1_TRIT_H
 #include <iostream>
-#include <cmath>
 
 enum class trit {
   Unknown = 0, True, False

@@ -23,6 +23,7 @@ class tritset {
   };
   explicit tritset(int reservedTrits);
   tritset(const tritset &oldTritset);
+  tritset(const std::initializer_list<trit> &list);
   tritset::reference operator[](int ind);
   trit operator[](int ind) const;
   tritset &operator=(const tritset &right);
@@ -42,9 +43,8 @@ class tritset {
   size_t numberOfTrits;
 };
 tritset operator!(const tritset &current);
-tritset operator&(const tritset &left,const tritset &right);
+tritset operator&(const tritset &left, const tritset &right);
 tritset operator|(const tritset &left, const tritset &right);
-bool operator==(const tritset &left,const tritset &right);
-
+bool operator==(const tritset &left, const tritset &right);
 
 #endif //LAB2_1_tritset_H

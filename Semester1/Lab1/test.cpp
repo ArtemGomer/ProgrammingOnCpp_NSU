@@ -12,6 +12,11 @@ TEST_CASE("Creating set") {
   REQUIRE(set2.size() == 0);
   REQUIRE(set2.capacity() == 0);
   REQUIRE_THROWS_AS(tritset(-2), std::invalid_argument);
+  tritset set3 = {trit::True, trit::False};
+  REQUIRE(set3[0] == trit::True);
+  REQUIRE(set3[1] == trit::False);
+  REQUIRE(set3.capacity() == 2);
+  REQUIRE(set3.size() == 1);
 }
 TEST_CASE("Tritset operations") {
   SECTION("[]") {
@@ -112,7 +117,7 @@ TEST_CASE("Tritset operations") {
     set[6] = trit::True;
     REQUIRE(set.logicalLength() == 7);
   }
-  SECTION("(operation)="){
+  SECTION("(operation)=") {
     tritset set1(5);
     tritset set2(5);
     REQUIRE(set1 == set2);
