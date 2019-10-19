@@ -30,6 +30,10 @@ static void SetTrit(unsigned char &currentChar, const trit value, const size_t i
   }
 }
 
+static size_t getMax(size_t left, size_t right){
+  return (left > right ? left: right);
+}
+
 //Конструктор
 tritset::tritset(const int reservedTrits) {
   if (reservedTrits < 0) {
@@ -82,32 +86,78 @@ tritset::reference::operator trit() const {
   return GetTrit(tSet->set[index / 4], index, tSet->numberOfTrits);
 }
 
+trit tritset::operator[](int ind) const {
+  if (ind < 0){
+    throw std::invalid_argument("Index can not be negative.");
+  }
+  return GetTrit(this->set[ind / 4], ind, this->numberOfTrits);
+}
+
 //Операции между тритсетами
-tritset operator|(tritset &left, tritset &right) {
-  size_t max_size = (left.numberOfTrits > right.numberOfTrits ? left.numberOfTrits : right.numberOfTrits);
-  tritset A(max_size);
-  for (size_t i = 0; i < max_size; i++) {
+tritset operator|(const tritset &left, const tritset &right) {
+  size_t maxSize = getMax(left.capacity(), right.capacity());
+  tritset A(maxSize);
+  for (size_t i = 0; i < maxSize; i++) {
     A[i] = left[i] | right[i];
   }
   return A;
 }
 
-tritset operator&(tritset &left, tritset &right) {
-  size_t max_size = (left.numberOfTrits > right.numberOfTrits ? left.numberOfTrits : right.numberOfTrits);
-  tritset A(max_size);
-  for (size_t i = 0; i < max_size; i++) {
+tritset operator&(const tritset &left, const tritset &right) {
+  size_t maxSize = getMax(left.capacity(), right.capacity());
+  tritset A(maxSize);
+  for (size_t i = 0; i < maxSize; i++) {
     A[i] = left[i] & right[i];
   }
   return A;
 }
 
-tritset operator~(tritset &current) {
-  size_t max_size = current.numberOfTrits;
+tritset operator!(const tritset &current) {
+  size_t max_size = current.capacity();
   tritset A(max_size);
   for (size_t i = 0; i < max_size; i++) {
-    A[i] = ~current[i];
+    A[i] = !current[i];
   }
   return A;
+}
+
+tritset &tritset::operator=(const tritset &right) {
+  size_t newSize = right.capacity();
+  numberOfTrits = newSize;
+  numberOfChars = ceil((double)newSize / 4);
+  this->set.resize(newSize);
+  for (size_t i = 0; i < newSize; i++){
+    (*this)[i] = right[i];
+  }
+  return *this;
+}
+
+tritset &tritset::operator|=(const tritset &right) {
+  *this = *this | right;
+  return *this;
+}
+
+tritset &tritset::operator&=(const tritset &right) {
+  *this = *this & right;
+  return *this;
+}
+
+tritset &tritset::operator!=(const tritset &right) {
+  *this = !right;
+  return *this;
+}
+
+bool operator==(const tritset &left, const tritset &right){
+  if (left.capacity() != right.capacity()){
+    return false;
+  }
+  size_t capacity = left.capacity();
+  for (size_t i = 0; i < capacity; i++){
+    if (left[i] != right[i]){
+      return false;
+    }
+  }
+  return true;
 }
 
 //Утилиты для тритсета
@@ -126,12 +176,12 @@ void tritset::shrink() {
 }
 
 //Вместимость тритов
-size_t tritset::capacity() {
+size_t tritset::capacity() const {
   return numberOfTrits;
 }
 
 //Количество char-ов для хранения тритов
-size_t tritset::size() {
+size_t tritset::size() const {
   return numberOfChars;
 }
 

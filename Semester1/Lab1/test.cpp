@@ -65,7 +65,7 @@ TEST_CASE("Tritset operations") {
     tritset set1(3);
     set1[0] = trit::True;
     set1[1] = trit::False;
-    tritset set2 = ~set1;
+    tritset set2 = !set1;
     REQUIRE(set2[0] == trit::False);
     REQUIRE(set2[1] == trit::True);
     REQUIRE(set2[2] == trit::Unknown);
@@ -111,5 +111,18 @@ TEST_CASE("Tritset operations") {
     tritset set(10);
     set[6] = trit::True;
     REQUIRE(set.logicalLength() == 7);
+  }
+  SECTION("(operation)="){
+    tritset set1(5);
+    tritset set2(5);
+    REQUIRE(set1 == set2);
+    set2[0] = trit::True;
+    set1 = set2;
+    REQUIRE(set1 == set2);
+    set1 |= set2;
+    REQUIRE(set1[0] == trit::True);
+    set1[0] = trit::False;
+    set1 &= set2;
+    REQUIRE(set1[0] == trit::False);
   }
 }

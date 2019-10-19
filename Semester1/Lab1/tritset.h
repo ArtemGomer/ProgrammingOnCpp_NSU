@@ -24,12 +24,14 @@ class tritset {
   explicit tritset(int reservedTrits);
   tritset(const tritset &oldTritset);
   tritset::reference operator[](int ind);
-  friend tritset operator|(tritset &left, tritset &right);
-  friend tritset operator&(tritset &left, tritset &right);
-  friend tritset operator~(tritset &current);
+  trit operator[](int ind) const;
+  tritset &operator=(const tritset &right);
+  tritset &operator|=(const tritset &right);
+  tritset &operator&=(const tritset &right);
+  tritset &operator!=(const tritset &right);
   void shrink();
-  size_t capacity();
-  size_t size();
+  size_t capacity() const;
+  size_t size() const;
   void trim(int lastIndex);
   size_t cardinality(trit val);
   size_t logicalLength();
@@ -39,5 +41,10 @@ class tritset {
   size_t numberOfChars;
   size_t numberOfTrits;
 };
+tritset operator!(const tritset &current);
+tritset operator&(const tritset &left,const tritset &right);
+tritset operator|(const tritset &left, const tritset &right);
+bool operator==(const tritset &left,const tritset &right);
+
 
 #endif //LAB2_1_tritset_H

@@ -19,7 +19,7 @@ trit operator&(trit left, trit right) {
     return trit::True;
 }
 
-trit operator~(trit currentTrit) {
+trit operator!(trit currentTrit) {
   if (currentTrit == trit::True)
     return trit::False;
   else if (currentTrit == trit::False)

@@ -14,6 +14,6 @@ enum class trit {
 std::ostream &operator<<(std::ostream &out, trit value);
 trit operator|(trit left, trit right);
 trit operator&(trit left, trit right);
-trit operator~(trit currentTrit);
+trit operator!(trit currentTrit);
 
 #endif //LAB2_1_TRIT_H
