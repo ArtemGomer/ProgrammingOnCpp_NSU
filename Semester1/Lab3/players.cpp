@@ -1,0 +1,116 @@
+//
+// Created by Gomer on 06.11.2019.
+//
+
+#include "players.h"
+void HumanPlayer::playerGenerator() {
+  std::cout << "Choose your name and number." << std::endl;
+  std::cin >> name;
+  std::cout << getName() << ", make your 4-digit number." << std::endl;
+  while (true) {
+    std::cin >> number;
+    if (number.length() == 4) {
+      break;
+    }
+    std::cout << "Please, make a 4-digit number" << std::endl;
+  }
+}
+
+std::string HumanPlayer::generateNumber() {
+  std::cout << getName() << ", try to guess a number." << std::endl;
+  std::string attempt;
+  while (true) {
+    std::cin >> attempt;
+    if (attempt.length() == 4) {
+      break;
+    }
+    std::cout << "Please, make a 4-digit number" << std::endl;
+  }
+  return attempt;
+}
+
+bool HumanPlayer::check(const std::string &atp, const std::string &opNumber) {
+  int bull = 0, cow = 0;
+  bool exceptions[10];
+  for (bool &exception : exceptions) {
+    exception = false;
+  }
+  for (size_t i = 0; i < 4; i++)
+    for (size_t j = 0; j < 4; j++) {
+      if (atp[i] == opNumber[j]) {
+        if (i == j) {
+          bull++;
+          exceptions[atp[i] - 48] = true;
+        } else {
+          if (!exceptions[atp[i] - 48]) {
+            cow++;
+          }
+        }
+      }
+    }
+  if (bull == 4) {
+    return true;
+  }
+  std::cout << "Bulls = " << bull << std::endl;
+  std::cout << "Cows = " << cow << std::endl;
+  system("pause");
+  system("cls");
+  return false;
+}
+
+void PrimitiveAI::playerGenerator() {
+  name = "Bot";
+  number = std::to_string(1000 + rand() % 9000);
+}
+
+PrimitiveAI::PrimitiveAI() : state(0){
+  for (int &bull : bulls){
+    bull = 0;
+  }
+}
+
+std::string PrimitiveAI::generateNumber() {
+  std::string buffer;
+  if (state < 10){
+    for (size_t i = 0; i < 4; i++){
+      buffer += std::to_string(state);
+    }
+    state++;
+  }
+  else {
+    if (state == 10) {
+      size_t digit = 0;
+      for (size_t i = 0; i < 10; i++) {
+        while (bulls[i] != 0) {
+          accNumbers[digit] = i;
+          bulls[i]--;
+          digit++;
+        }
+      }
+      state++;
+    }
+    for (size_t i = 4; i > 0; i--){
+      int pos = rand() % i;
+      buffer += std::to_string(accNumbers[pos]);
+      std::swap(accNumbers[pos], accNumbers[i - 1]);
+    }
+  }
+  return buffer;
+}
+
+bool PrimitiveAI::check(const std::string &atp, const std::string &opNumber) {
+  if (state < 10){
+    for (size_t i = 0; i < 4; i++){
+      if (opNumber[i] == state + 47){
+        bulls[state - 1]++;
+      }
+    }
+  }
+  return !(atp != opNumber);
+}
+//
+//void AdvancedAI::playerGenerator() {
+//  name = "Bot";
+//  number = std::to_string(1000 + rand() % 9000);
+//}
+
