@@ -1,11 +1,19 @@
 #include "game.h"
+#include <ctime>
+
 
 int main() {
-//  system("color 17");
+  srand((unsigned int) time(nullptr));
+  for (size_t i = 0; i < 5; i++) {
+    rand();
+  }
+  BEGIN:
+  system("cls");
+  game::drawLogo();
   std::cout << "Please, choose game mode:" << std::endl
-            << "1) PvP" << std::endl
-            << "2) PvPrimitiveAI" << std::endl
-            << "3) PvAdvancedAI" << std::endl;
+            << "1) Player vs Player" << std::endl
+            << "2) Player vs PrimitiveAI" << std::endl
+            << "3) Player vs AdvancedAI" << std::endl;
   char choice = 0;
   IPlayer *player = nullptr;
   while (true) {
@@ -31,6 +39,12 @@ int main() {
   }
   system("cls");
   game::start(player);
-  delete(player);
+  std::cout << "Do you want to play again? y/n" << std::endl;
+  std::string ans;
+  std::cin >> ans;
+  if (ans == "y") {
+    goto BEGIN;
+  }
+  delete (player);
   return 0;
 }

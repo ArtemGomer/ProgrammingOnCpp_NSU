@@ -4,7 +4,8 @@
 
 #include "players.h"
 void HumanPlayer::playerGenerator() {
-  std::cout << "Choose your name and number." << std::endl;
+  system("cls");
+  std::cout << "Choose your name." << std::endl;
   std::cin >> name;
   std::cout << getName() << ", make your 4-digit number." << std::endl;
   while (true) {
@@ -12,7 +13,7 @@ void HumanPlayer::playerGenerator() {
     if (number.length() == 4) {
       break;
     }
-    std::cout << "Please, make a 4-digit number" << std::endl;
+    std::cout << "Please, make a 4-digit number." << std::endl;
   }
 }
 
@@ -24,27 +25,29 @@ std::string HumanPlayer::generateNumber() {
     if (attempt.length() == 4) {
       break;
     }
-    std::cout << "Please, make a 4-digit number" << std::endl;
+    std::cout << "Please, make a 4-digit number." << std::endl;
   }
   return attempt;
 }
 
 bool HumanPlayer::check(const std::string &atp, const std::string &opNumber) {
   int bull = 0, cow = 0;
-  bool exceptions[10];
+  bool exceptions[4];
   for (bool &exception : exceptions) {
     exception = false;
+  }
+  for (size_t i = 0; i < 4; i++){
+    if (atp[i] == opNumber[i]){
+      bull++;
+      exceptions[i] = true;
+    }
   }
   for (size_t i = 0; i < 4; i++)
     for (size_t j = 0; j < 4; j++) {
       if (atp[i] == opNumber[j]) {
-        if (i == j) {
-          bull++;
-          exceptions[atp[i] - 48] = true;
-        } else {
-          if (!exceptions[atp[i] - 48]) {
-            cow++;
-          }
+        if (!exceptions[j]){
+          cow++;
+          exceptions[j] = true;
         }
       }
     }
@@ -59,8 +62,8 @@ bool HumanPlayer::check(const std::string &atp, const std::string &opNumber) {
 }
 
 void PrimitiveAI::playerGenerator() {
-  name = "Bot";
-  number = std::to_string(1000 + rand() % 9000);
+  name = "PrimitiveAI";
+  number = std::to_string(1000 + (rand() % 9000));
 }
 
 PrimitiveAI::PrimitiveAI() : state(0){
@@ -79,6 +82,7 @@ std::string PrimitiveAI::generateNumber() {
   }
   else {
     if (state == 10) {
+
       size_t digit = 0;
       for (size_t i = 0; i < 10; i++) {
         while (bulls[i] != 0) {
@@ -90,7 +94,7 @@ std::string PrimitiveAI::generateNumber() {
       state++;
     }
     for (size_t i = 4; i > 0; i--){
-      int pos = rand() % i;
+      size_t pos = rand() % i;
       buffer += std::to_string(accNumbers[pos]);
       std::swap(accNumbers[pos], accNumbers[i - 1]);
     }

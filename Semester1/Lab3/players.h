@@ -6,7 +6,6 @@
 #define LABGAME_PLAYERS_H
 #include <string>
 #include <iostream>
-#include <array>
 class IPlayer {
  protected:
   std::string name;

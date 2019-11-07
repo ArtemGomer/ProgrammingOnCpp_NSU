@@ -11,6 +11,7 @@ enum class Players{
 
 class game {
  public:
+  static void drawLogo();
   static void start(IPlayer *player);
 };
 
