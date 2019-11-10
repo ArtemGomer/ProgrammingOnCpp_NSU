@@ -74,6 +74,7 @@ PrimitiveAI::PrimitiveAI() : state(0){
 
 std::string PrimitiveAI::generateNumber() {
   std::string buffer;
+  static int accNumbers[4] = {0, 0, 0, 0};
   if (state < 10){
     for (size_t i = 0; i < 4; i++){
       buffer += std::to_string(state);
@@ -82,7 +83,6 @@ std::string PrimitiveAI::generateNumber() {
   }
   else {
     if (state == 10) {
-
       size_t digit = 0;
       for (size_t i = 0; i < 10; i++) {
         while (bulls[i] != 0) {
@@ -103,18 +103,31 @@ std::string PrimitiveAI::generateNumber() {
 }
 
 bool PrimitiveAI::check(const std::string &atp, const std::string &opNumber) {
+  static int bullsCounter = 0;
   if (state < 10){
     for (size_t i = 0; i < 4; i++){
-      if (opNumber[i] == state + 47){
+      if (opNumber[i] == (state - 1) + 48){
         bulls[state - 1]++;
+        bullsCounter++;
+        if (bullsCounter == 4){
+          state = 10;
+        }
       }
     }
   }
   return !(atp != opNumber);
 }
+
+std::string IPlayer::getName() const {
+  return name;
+}
+
+std::string IPlayer::getNumber() const {
+  return number;
+}
+
 //
 //void AdvancedAI::playerGenerator() {
 //  name = "Bot";
 //  number = std::to_string(1000 + rand() % 9000);
 //}
-

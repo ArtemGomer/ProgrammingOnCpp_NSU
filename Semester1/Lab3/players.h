@@ -15,12 +15,8 @@ class IPlayer {
   virtual void playerGenerator() = 0;
   virtual std::string generateNumber() = 0;
   virtual bool check(const std::string &atp, const std::string &opNumber) = 0;
-  std::string getName(){
-    return name;
-  }
-  std::string getNumber(){
-    return number;
-  }
+  [[nodiscard]] std::string getName() const;
+  [[nodiscard]] std::string getNumber() const;
 };
 
 class HumanPlayer : public IPlayer {
@@ -33,7 +29,6 @@ class HumanPlayer : public IPlayer {
 class PrimitiveAI : public IPlayer{
  private:
   int bulls[10]{};
-  int accNumbers[4]{};
   int state;
  public:
   PrimitiveAI();

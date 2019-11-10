@@ -5,14 +5,17 @@
 #ifndef LABGAME_GAME_H
 #define LABGAME_GAME_H
 #include "players.h"
+#include <ctime>
 enum class Players{
   Player1, Player2
 };
 
 class game {
  public:
-  static void drawLogo();
-  static void start(IPlayer *player);
+  static void printLogo();
+  static void printMods();
+  static bool start(IPlayer *player);
+  static IPlayer *makeChoice();
 };
 
 #endif //LABGAME_GAME_H
