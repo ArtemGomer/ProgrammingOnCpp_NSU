@@ -1,36 +1,38 @@
 //
-// Created by Gomer on 31.10.2019.
+// Created by Gomer on 15.11.2019.
 //
 
 #ifndef LAB32_FACTORY_H
 #define LAB32_FACTORY_H
 #include "Iblock.h"
-#include <map>
-class abstractIblockCreator {
+
+class IblockCreator {
  public:
   virtual Iblock *create() const = 0;
 };
 
-template<class C>
-class IblockCreator : public abstractIblockCreator {
+class blockFactory {
+ private:
+  std::map<std::string, IblockCreator *> _factory;
  public:
+  void add(const std::string &id, IblockCreator* creator) {
+    auto it = _factory.find(id);
+    if (it == _factory.end())
+      _factory[id] = creator;
+  };
+  Iblock *create(const std::string &id);
+  static blockFactory &Instance();
+};
+
+template<class C>
+class blockCreator : public IblockCreator {
+ public:
+  blockCreator(const std::string &key){
+    blockFactory::Instance().add(key, this);
+  }
   Iblock *create() const override {
     return new C;
   }
-};
-
-class IblockFactory {
- private:
-  std::map<std::string, abstractIblockCreator *> _factory;
- public:
-  template<class C>
-  void add(const std::string &id) {
-    auto it = _factory.find(id);
-    if (it == _factory.end())
-      _factory[id] = new IblockCreator<C>();
-  };
-  Iblock *create(const std::string &id);
-  static IblockFactory &Instance();
 };
 
 #endif //LAB32_FACTORY_H

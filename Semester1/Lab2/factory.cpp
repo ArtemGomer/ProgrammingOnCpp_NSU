@@ -1,14 +1,14 @@
 //
-// Created by Gomer on 31.10.2019.
+// Created by Gomer on 15.11.2019.
 //
-#include "factory.h"
 
-IblockFactory &IblockFactory::Instance() {
-  static IblockFactory factory;
+#include "factory.h"
+blockFactory &blockFactory::Instance() {
+  static blockFactory factory;
   return factory;
 }
 
-Iblock *IblockFactory::create(const std::string &id) {
+Iblock *blockFactory::create(const std::string &id) {
   auto it = _factory.find(id);
   if (it != _factory.end()) {
     return it->second->create();

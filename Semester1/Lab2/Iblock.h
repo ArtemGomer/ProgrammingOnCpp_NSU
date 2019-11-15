@@ -4,45 +4,21 @@
 
 #ifndef LAB31_IBLOCK_H
 #define LAB31_IBLOCK_H
-#include <vector>
 #include <string>
-#include <fstream>
-#include <iostream>
-#include <algorithm>
+#include <vector>
+#include <map>
+
+#define REGISTER_FUNCTION(C) static blockCreator<C> C(#C)
+
+enum class blockType{
+  IN, INOUT, OUT
+};
+
 class Iblock {
  public:
   virtual ~Iblock() = default;
   virtual void execute(std::vector<std::string> &args, std::vector<std::string> &text) = 0;
-};
-
-class Readfile : public Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
-};
-
-class Writefile : public Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
-};
-
-class Sort : public Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
-};
-
-class Grep : public Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
-};
-
-class Dump : public Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
-};
-
-class Replace : public  Iblock{
- public:
-  void execute(std::vector<std::string> &args, std::vector<std::string> &text) override;
+  virtual blockType getType() = 0;
 };
 
 #endif //LAB31_IBLOCK_H
