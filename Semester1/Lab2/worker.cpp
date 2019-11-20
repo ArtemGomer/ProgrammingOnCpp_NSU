@@ -14,19 +14,26 @@ void worker::process(const char *workFile) {
   p.parse(workFile);
   auto sequence = p.getSequence();
   auto parsedText = p.getParsedText();
-  Iblock *blockCheck = blockFactory::Instance().create(parsedText[sequence.front()].first);
-  if (blockCheck->getType() != blockType::IN){
-    delete(blockCheck);
-    throw std::logic_error("First function must be 'readfile' and last function must be 'writefile'");
-  }
-  blockCheck = blockFactory::Instance().create(parsedText[sequence.back()].first);
-  if (blockCheck->getType() != blockType::OUT){
-    delete(blockCheck);
-    throw std::logic_error("First function must be 'readfile' and last function must be 'writefile'");
-  }
+  size_t counter = 1;
   for (const auto &id : sequence) {
     Iblock *block = blockFactory::Instance().create(parsedText[id].first);
+    if (counter == 1) {
+      if (block->getType() != blockType::IN) {
+        throw std::logic_error("Wrong sequence of functions");
+      }
+    }
+    else if (counter == sequence.size()) {
+      if (block->getType() != blockType::OUT) {
+        throw std::logic_error("Wrong sequence of functions");
+      }
+    }
+    else{
+      if (block->getType() != blockType::INOUT){
+        throw std::logic_error("Wrong sequence of functions");
+      }
+    }
     block->execute((parsedText[id].second), text);
+    counter++;
     delete block;
   }
 }
