@@ -6,6 +6,9 @@
 #define LABGAME_PLAYERS_H
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <map>
 class IPlayer {
  protected:
   std::string name;
@@ -20,25 +23,31 @@ class IPlayer {
 };
 
 class HumanPlayer : public IPlayer {
+ private:
+  std::map<std::string, std::pair<int, int>> steps{};
  public:
   std::string generateNumber() override;
   void playerGenerator() override;
+  bool check(const std::string &atp, const std::string &opNumber) override;
+};
+
+class AdvancedAI : public IPlayer{
+ private:
+  std::string bulls;
+  int state = 0;
+ public:
+  void playerGenerator() override;
+  std::string generateNumber() override;
   bool check(const std::string &atp, const std::string &opNumber) override;
 };
 
 class PrimitiveAI : public IPlayer{
  private:
-  int bulls[10]{};
-  int state;
+  std::string bulls;
+  int state = 0;
  public:
-  PrimitiveAI();
   void playerGenerator() override;
   std::string generateNumber() override;
   bool check(const std::string &atp, const std::string &opNumber) override;
 };
-
-//class AdvancedAI : public IPlayer{
-// public:
-//  void playerGenerator() override;
-//};
 #endif //LABGAME_PLAYERS_H

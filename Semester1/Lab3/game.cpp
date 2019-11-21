@@ -39,7 +39,7 @@ bool game::start(IPlayer *player2) {
     std::cout << "Do you want to play again? y/n" << std::endl;
     char ans;
     std::cin >> ans;
-    return tolower(ans) == 'n';
+    return tolower(ans) != 'n';
   }
 }
 
@@ -81,8 +81,7 @@ IPlayer* game::makeChoice() {
       return new PrimitiveAI;
     }
     default: {
-//      return new AdvancedAI;
+      return new AdvancedAI;
     }
   }
-  return nullptr;
 }
