@@ -11,7 +11,7 @@ class replace : public  Iblock{
   void execute(std::vector<std::string> &args, std::vector<std::string> &text) override{
     for (auto & i : text){
       for (auto j = i.find(args[0]); j != std::string::npos; j = i.find(args[0])){
-        i.replace(j, j + args[0].length(), args[1]);
+        i.replace(j, args[0].length(), args[1]);
       }
     }
   }
