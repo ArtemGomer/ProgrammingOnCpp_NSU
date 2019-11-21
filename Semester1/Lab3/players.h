@@ -31,7 +31,7 @@ class HumanPlayer : public IPlayer {
   bool check(const std::string &atp, const std::string &opNumber) override;
 };
 
-class AdvancedAI : public IPlayer{
+class AdvancedAI : public IPlayer {
  private:
   std::string bulls;
   int state = 0;
@@ -41,7 +41,7 @@ class AdvancedAI : public IPlayer{
   bool check(const std::string &atp, const std::string &opNumber) override;
 };
 
-class PrimitiveAI : public IPlayer{
+class PrimitiveAI : public IPlayer {
  private:
   std::string bulls;
   int state = 0;

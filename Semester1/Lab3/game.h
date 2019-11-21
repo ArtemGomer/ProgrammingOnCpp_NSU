@@ -6,7 +6,7 @@
 #define LABGAME_GAME_H
 #include "players.h"
 #include <ctime>
-enum class Players{
+enum class Players {
   Player1, Player2
 };
 
@@ -16,6 +16,7 @@ class game {
   static void printMods();
   static bool start(IPlayer *player);
   static IPlayer *makeChoice();
+  static void printRules();
 };
 
 #endif //LABGAME_GAME_H
