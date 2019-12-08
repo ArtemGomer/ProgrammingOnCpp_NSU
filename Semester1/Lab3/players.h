@@ -18,8 +18,8 @@ class IPlayer {
   virtual void playerGenerator() = 0;
   virtual std::string generateNumber() = 0;
   virtual bool check(const std::string &atp, const std::string &opNumber) = 0;
-  [[nodiscard]] std::string getName() const;
-  [[nodiscard]] std::string getNumber() const;
+  std::string getName() const;
+  std::string getNumber() const;
 };
 
 class HumanPlayer : public IPlayer {
