@@ -44,17 +44,20 @@ std::string convert(std::string &cell) {
   return cell;
 }
 
-std::vector<std::string> parseLine(std::string &line) {
+static std::vector<std::string> parseLine(std::string &line, const size_t columns) {
   std::vector<std::string> parsedLine;
   for (size_t i = 0; i < line.size(); i++) {
     std::string cell;
-    while (i < line.size() && line[i] != ',') {
+    while (i < line.size() && line[i] != ';') {
       cell += line[i];
       i++;
     }
     if (!cell.empty()) {
       parsedLine.push_back(cell);
     }
+  }
+  if (parsedLine.size() != columns){
+    throw std::logic_error("Wrong data table");
   }
   return parsedLine;
 }
@@ -103,7 +106,7 @@ class CsvParser{
       if (line.empty()){
         return;
       }
-      createTuple<0>(parseLine(line), rowTuple);
+      createTuple<0>(parseLine(line, sizeof...(Args)), rowTuple);
     }
    public:
     explicit Iterator(std::ifstream *in) : _stream(in){
