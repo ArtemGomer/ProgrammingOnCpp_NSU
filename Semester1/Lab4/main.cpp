@@ -9,7 +9,12 @@ int main(int argc, char **argv) {
       std::cout << it << std::endl;
     }
   }
-  catch (std::exception &ex){
+  catch (std::logic_error &ex){
+    std::cout << ex.what() << std::endl;
+    f.close();
+    return 1;
+  }
+  catch (std::ifstream::failure &ex){
     std::cout << ex.what() << std::endl;
     f.close();
     return 1;

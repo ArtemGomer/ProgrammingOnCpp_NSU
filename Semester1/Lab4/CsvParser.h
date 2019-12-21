@@ -35,6 +35,7 @@ template<typename T>
 T convert(std::string &cell) {
   T t;
   std::stringstream str(cell);
+  str.exceptions(std::ifstream::failbit | std::ifstream::badbit);
   str >> t;
   return t;
 }
